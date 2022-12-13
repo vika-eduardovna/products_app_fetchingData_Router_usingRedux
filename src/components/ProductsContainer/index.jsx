@@ -7,28 +7,9 @@ import s from './style.module.sass'
 
 
 export default function ProductsContainer() {
-    //const number = useSelector(state => state);
     const products = useSelector(state => state.products)
     const dispatch = useDispatch();
-    {/*const incrSubmit = event => {
-        event.preventDefault();
-        const value = event.target.amount.value;
-        const action = {
-            type: 'INCREMENT',
-            payload: +value
-        }
-        dispatch(action)
-    };
-    const decrSubmit = event => {
-        event.preventDefault();
-        const value = event.target.amount.value;
-        const action = {
-            type: 'DECREMENT',
-            payload: +value
-        }
-        dispatch(action)
-    };*/}
-
+    
     useEffect(() => {
         dispatch(loadProducts)
     }, []);
@@ -41,17 +22,6 @@ export default function ProductsContainer() {
 
     return (
         <div>
-            {/*<p>{number}</p>
-            <form onSubmit={incrSubmit}>
-                <input type="text" name='amount' />
-                <button>Increase</button>
-            </form>
-
-            <form onSubmit={decrSubmit}>
-                <input type="text" name='amount' />
-                <button>Decrease</button>
-            </form> */}
-
             <form onSubmit={submit}>
                 <input type="text" name='name' placeholder='name' />
                 <input type="text" name='price' placeholder='price' />

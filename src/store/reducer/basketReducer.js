@@ -1,4 +1,8 @@
-const defaultState = [];
+const getData = () => {
+    const data = JSON.parse(localStorage.getItem('basket_items')) ?? [];
+    return data
+}
+const defaultState = getData();
 export const CLEAR_BASKET = 'CLEAR_BASKET'
 export const ADD_TO_BASKET = 'ADD_TO_BASKET'
 export const INCREASE_COUNT = 'INCREASE_COUNT'
@@ -6,7 +10,7 @@ export const DECREASE_COUNT = 'DECREASE_COUNT'
 export const add_to_basket_action = (id, name, price) => {
     return {
         type: ADD_TO_BASKET,
-        payload: {id, name, price}
+        payload: { id, name, price }
     }
 }
 
@@ -31,22 +35,31 @@ const checkProduct = (state, product) => {
     }
 }
 
+const storeData = (state) => {
+    localStorage.setItem('basket_items', JSON.stringify(state))
+}
+
 export const basketReducer = (state = defaultState, action) => {
     if (action.type === ADD_TO_BASKET) {
-        return checkProduct(state, action.payload)
+        const new_state = checkProduct(state, action.payload);
+        storeData(new_state);
+        return new_state
     } else if (action.type === INCREASE_COUNT) {
-        state.find(({ id }) => id === action.payload).count++
+        state.find(({ id }) => id === action.payload).count++;
+        storeData(state);
         return [...state]
     } else if (action.type === DECREASE_COUNT) {
         const result = state.find(({ id }) => id === action.payload);
         if (result.count === 1) {
-            state = state.filter(({id}) => id !== action.payload);
+            state = state.filter(({ id }) => id !== action.payload);
         } else {
             result.count--;
         }
+        storeData(state)
         return [...state]
     } else if (action.type === CLEAR_BASKET) {
-        return defaultState
+        storeData([])
+        return []
     } else {
         return state
     }
